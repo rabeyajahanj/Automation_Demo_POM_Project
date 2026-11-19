@@ -1,0 +1,142 @@
+{
+  "info": {
+    "_postman_id": "67c78d43-50b3-4dee-a36f-b963646ef41c",
+    "name": "Users API Tests(demowebsite)",
+    "description": "GET all users, save an ID, then PUT /users/{id} with dynamic data. Every request validates the status code.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "32277303"
+  },
+  "item": [
+    {
+      "name": "Get all users",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\n    pm.response.to.have.status(200);\n});\n\nvar users = pm.response.json();\n\npm.test(\"Response is a non-empty array\", function () {\n    pm.expect(users).to.be.an(\"array\");\n    pm.expect(users.length).to.be.above(0);\n});\n\npm.test(\"Each user has id, name and email\", function () {\n    users.forEach(function (user) {\n        pm.expect(user).to.have.property(\"id\");\n        pm.expect(user).to.have.property(\"name\");\n        pm.expect(user).to.have.property(\"email\");\n    });\n})\npm.collectionVariables.set(\"userId\", users[0].id);\npm.collectionVariables.set(\"userData\", JSON.stringify(users[0]));"
+            ]
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/users",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update user",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "var user = JSON.parse(pm.collectionVariables.get(\"userData\"));\n\nvar stamp = Date.now();\nvar newName = \"Updated User \" + stamp;\nvar newEmail = \"updated\" + stamp + \"@example.com\";\nvar newCompany = \"Company \" + stamp;\n\nuser.name = newName;\nuser.email = newEmail;\nuser.company.name = newCompany;\n\npm.collectionVariables.set(\"newName\", newName);\npm.collectionVariables.set(\"putBody\", JSON.stringify(user));"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\n    pm.response.to.have.status(200);\n});\n\nvar body = pm.response.json();\n\npm.test(\"ID matches the saved ID\", function () {\n    pm.expect(body.id).to.eql(Number(pm.collectionVariables.get(\"userId\")));\n});\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/users/{{userId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users",
+            "{{userId}}"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://jsonplaceholder.typicode.com"
+    },
+    {
+      "key": "userId",
+      "value": ""
+    },
+    {
+      "key": "userData",
+      "value": ""
+    },
+    {
+      "key": "putBody",
+      "value": ""
+    },
+    {
+      "key": "newName",
+      "value": ""
+    },
+    {
+      "key": "newEmail",
+      "value": ""
+    },
+    {
+      "key": "newCompany",
+      "value": ""
+    }
+  ]
+}

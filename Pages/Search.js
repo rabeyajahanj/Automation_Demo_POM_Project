@@ -8,8 +8,8 @@ class Search extends Base {
     this.resultTitles = page.locator('.search-results .product-item .product-title a');
   }
 
-  async SearchFor() {
-    await this.searchBox.fill('Computing and Internet');
+  async SearchFor(productName) {
+    await this.searchBox.fill(productName);
   
   }
 
@@ -21,6 +21,10 @@ class Search extends Base {
     const result = this.resultTitles.first();
     await result.waitFor({ state: 'visible' });
     return (await result.innerText()).trim();
+  }
+
+  async OpenResult(){
+    await this.clickElement(this.resultTitles.first());
   }
 }
 export { Search };
