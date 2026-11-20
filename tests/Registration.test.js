@@ -20,7 +20,6 @@ test('Q2 - Register & Add Product to Cart  ', async ({ page }) => {
   //RegistrationPage
   await registration.pageOpen();
   await registration.ClickRegistrationLink();
-  await page.waitForTimeout(2000);
 
   await registration.ClickGenderButton();
   await registration.InsertFName('Rabeya');
@@ -33,7 +32,6 @@ test('Q2 - Register & Add Product to Cart  ', async ({ page }) => {
   await registration.ClickRegistrationButton();
   await expect(registration.verifyRegistration).toContainText('Your registration completed');
   await registration.ClickContinue();
-  await page.waitForTimeout(2000); 
 
  //again login
   await expect(LoginPage.verifyLogin).toBeVisible();
