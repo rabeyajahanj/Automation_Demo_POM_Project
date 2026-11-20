@@ -11,9 +11,6 @@ class Cart extends Base{
     await (this.cartLink).click();
   }
 
-  async CartRows(){
-    await this.clickElement(this.cartRows);
-  }
 }
 
 export { Cart }; 
