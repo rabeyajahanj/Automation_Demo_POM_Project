@@ -1,14 +1,18 @@
 import { Base } from "./Base.js";
 
-class Cart {
+class Cart extends Base{
   constructor(page) {
-    this.page = page;
+    super(page);
     this.cartLink = page.locator('a[href="/cart"]').first();
     this.cartRows = page.locator('.cart-item-row');
   }
 
   async ClickOnCartLink() {
-    await this.cartLink.click();
+    await (this.cartLink).click();
+  }
+
+  async CartRows(){
+    await this.clickElement(this.cartRows);
   }
 }
 
